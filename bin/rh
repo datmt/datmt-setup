@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# rh: search rich-history log. Usage: rh [pattern]
+set -euo pipefail
+FILE="${RICH_HISTORY_FILE:-$HOME/.local/share/rich-history/history.jsonl}"
+PATTERN="${1:-}"
+
+if [[ -n "$PATTERN" ]]; then
+  grep -F "$PATTERN" "$FILE" 2>/dev/null || true
+else
+  cat "$FILE" 2>/dev/null
+fi | jq -r '[.ts, .dir, .cmd] | @tsv' | column -t -s $'\t'
