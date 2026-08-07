@@ -34,10 +34,12 @@ unwire_rc() {
 unwire_rc "$HOME/.zshrc"
 unwire_rc "$HOME/.bashrc"
 
-if [ -L "$BIN_DIR/rh" ] || [ -e "$BIN_DIR/rh" ]; then
-  rm -f "$BIN_DIR/rh"
-  log "Removed $BIN_DIR/rh"
-fi
+for cli in rh rh-import; do
+  if [ -L "$BIN_DIR/$cli" ] || [ -e "$BIN_DIR/$cli" ]; then
+    rm -f "$BIN_DIR/$cli"
+    log "Removed $BIN_DIR/$cli"
+  fi
+done
 
 if [ -d "$INSTALL_DIR" ]; then
   rm -rf "$INSTALL_DIR"

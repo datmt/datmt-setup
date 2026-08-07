@@ -24,11 +24,13 @@ else
   git clone --quiet "$REPO_URL" "$INSTALL_DIR"
 fi
 
-# symlink the rh CLI
+# symlink the CLIs
 mkdir -p "$BIN_DIR"
 ln -sf "$INSTALL_DIR/bin/rh" "$BIN_DIR/rh"
-chmod +x "$INSTALL_DIR/bin/rh"
+ln -sf "$INSTALL_DIR/bin/rh-import" "$BIN_DIR/rh-import"
+chmod +x "$INSTALL_DIR/bin/rh" "$INSTALL_DIR/bin/rh-import"
 log "Linked rh -> $BIN_DIR/rh"
+log "Linked rh-import -> $BIN_DIR/rh-import"
 case ":$PATH:" in
   *":$BIN_DIR:"*) ;;
   *) log "Note: $BIN_DIR is not on your PATH. Add it to use the 'rh' command." ;;
@@ -68,4 +70,5 @@ log ""
 log "rich-history installed."
 log "History log: \${RICH_HISTORY_FILE:-$HOME/.local/share/rich-history/history.jsonl}"
 log "Search with: rh [pattern]"
+log "One-time import of your existing shell history: rh-import"
 log "Restart your shell (or run 'exec \$SHELL') to start logging."

@@ -1,0 +1,60 @@
+#!/usr/bin/env sh
+# rh-import: one-time import of existing shell history into the rich-history log.
+# Usage: rh-import [path-to-history-file]
+# Imported entries have no known working directory (native history doesn't
+# record it) and are tagged "imported":true. Prepended so real-time entries
+# stay in order after them.
+set -eu
+
+: "${RICH_HISTORY_FILE:=$HOME/.local/share/rich-history/history.jsonl}"
+mkdir -p "$(dirname "$RICH_HISTORY_FILE")"
+
+HIST_FILE="${1:-${HISTFILE:-}}"
+if [ -z "$HIST_FILE" ]; then
+  if [ -f "$HOME/.zsh_history" ]; then
+    HIST_FILE="$HOME/.zsh_history"
+  elif [ -f "$HOME/.bash_history" ]; then
+    HIST_FILE="$HOME/.bash_history"
+  fi
+fi
+[ -n "$HIST_FILE" ] || { echo "no history file found; pass a path, e.g. rh-import ~/.bash_history" >&2; exit 1; }
+[ -f "$HIST_FILE" ] || { echo "history file not found: $HIST_FILE" >&2; exit 1; }
+
+epoch_to_iso() {
+  date -u -d "@$1" +%Y-%m-%dT%H:%M:%SZ 2>/dev/null || date -u -r "$1" +%Y-%m-%dT%H:%M:%SZ 2>/dev/null || echo ""
+}
+
+tmp_imported="$(mktemp)"
+count=0
+pending_ts=""
+
+while IFS= read -r line || [ -n "$line" ]; do
+  case "$line" in
+    ': '*';'*)
+      rest="${line#: }"
+      ts_raw="${rest%%:*}"
+      cmd="${rest#*;}"
+      ;;
+    '#'[0-9]*)
+      pending_ts="${line#\#}"
+      continue
+      ;;
+    *)
+      cmd="$line"
+      ts_raw="$pending_ts"
+      pending_ts=""
+      ;;
+  esac
+  [ -z "$cmd" ] && continue
+  ts=""
+  [ -n "$ts_raw" ] && ts="$(epoch_to_iso "$ts_raw")"
+  jq -cn --arg ts "$ts" --arg cmd "$cmd" '{ts: $ts, dir: "", cmd: $cmd, imported: true}' >> "$tmp_imported"
+  count=$((count + 1))
+done < "$HIST_FILE"
+
+touch "$RICH_HISTORY_FILE"
+cat "$tmp_imported" "$RICH_HISTORY_FILE" > "$RICH_HISTORY_FILE.new"
+mv "$RICH_HISTORY_FILE.new" "$RICH_HISTORY_FILE"
+rm -f "$tmp_imported"
+
+echo "Imported $count entries from $HIST_FILE into $RICH_HISTORY_FILE"

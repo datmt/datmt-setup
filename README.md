@@ -10,6 +10,17 @@ curl -fsSL https://raw.githubusercontent.com/datmt/rich-history/master/install.s
 
 Then restart your shell (`exec $SHELL`).
 
+### Import existing history (optional, one-time)
+
+The log starts empty at install — `history`/`rh` won't show commands you ran before installing. Backfill from your shell's native history file:
+
+```sh
+rh-import                    # auto-detects ~/.zsh_history or ~/.bash_history
+rh-import /path/to/histfile  # or point at one explicitly
+```
+
+Imported entries have no known working directory (native history doesn't record it) and are tagged `"imported": true`.
+
 ## Search
 
 ```sh
