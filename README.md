@@ -15,6 +15,7 @@ Then restart your shell (`exec $SHELL`).
 ```sh
 rh              # dump full history
 rh some_pattern # grep-filter by substring
+history         # aliased to rh — same as above
 ```
 
 ## Uninstall
@@ -35,3 +36,4 @@ curl -fsSL https://raw.githubusercontent.com/datmt/rich-history/master/uninstall
 - Location: `~/.local/share/rich-history/history.jsonl` (override with `$RICH_HISTORY_FILE`)
 - Requires `git` and `jq`
 - Install location: `~/.rich-history` (override with `$RICH_HISTORY_HOME`)
+- `history` is aliased to `rh` in both shells. The shell's native history builtin still works internally (logging uses `builtin history` in bash) — only the `history` command you type is overridden.
