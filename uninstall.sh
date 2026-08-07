@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 # rich-history uninstaller
-# Usage: curl -fsSL https://raw.githubusercontent.com/datmt/rich-history/main/uninstall.sh | sh
+# Usage: curl -fsSL https://raw.githubusercontent.com/datmt/rich-history/master/uninstall.sh | sh
 # Add --purge to also delete logged history data.
 set -eu
 

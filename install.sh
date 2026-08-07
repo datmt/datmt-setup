@@ -1,6 +1,6 @@
 #!/usr/bin/env sh
 # rich-history installer
-# Usage: curl -fsSL https://raw.githubusercontent.com/datmt/rich-history/main/install.sh | sh
+# Usage: curl -fsSL https://raw.githubusercontent.com/datmt/rich-history/master/install.sh | sh
 set -eu
 
 REPO_URL="${RICH_HISTORY_REPO:-https://github.com/datmt/rich-history.git}"
