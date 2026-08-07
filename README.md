@@ -30,8 +30,13 @@ Imported entries have no known working directory (native history doesn't record 
 ```sh
 rh              # dump full history
 rh some_pattern # grep-filter by substring
+rh 20           # last 20 entries
+rh -d 42        # delete entry 42 (1-indexed, oldest first)
+rh -c           # clear the entire log
 history         # aliased to rh — same as above
 ```
+
+`rh` is not a full drop-in for `history` — it covers search, tail, delete-by-index, and clear. Flags like `-a`/`-r`/`-w` (file read/write/append) and in-place editing aren't supported.
 
 ## Uninstall
 

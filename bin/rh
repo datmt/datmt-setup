@@ -1,11 +1,36 @@
 #!/usr/bin/env bash
-# rh: search rich-history log. Usage: rh [pattern]
+# rh: search/manage the rich-history log.
+# Usage:
+#   rh                dump full log
+#   rh <pattern>       grep-filter by substring
+#   rh <N>              show last N entries
+#   rh -d <N>           delete entry N (1-indexed, oldest first)
+#   rh -c                clear the entire log
 set -euo pipefail
 FILE="${RICH_HISTORY_FILE:-$HOME/.local/share/rich-history/history.jsonl}"
-PATTERN="${1:-}"
+touch "$FILE"
 
-if [[ -n "$PATTERN" ]]; then
-  grep -F "$PATTERN" "$FILE" 2>/dev/null || true
-else
-  cat "$FILE" 2>/dev/null
-fi | jq -r '[.ts, .dir, .cmd] | @tsv' | column -t -s $'\t'
+_print() { jq -r '[.ts, .dir, .cmd] | @tsv' | column -t -s $'\t'; }
+
+case "${1:-}" in
+  -c)
+    : > "$FILE"
+    echo "Cleared $FILE"
+    ;;
+  -d)
+    n="${2:?usage: rh -d <line-number>}"
+    [[ "$n" =~ ^[0-9]+$ ]] || { echo "rh -d: not a number: $n" >&2; exit 1; }
+    tmp="$(mktemp)"
+    sed "${n}d" "$FILE" > "$tmp" && mv "$tmp" "$FILE"
+    echo "Deleted entry $n"
+    ;;
+  '')
+    _print < "$FILE"
+    ;;
+  *[!0-9]*)
+    grep -F "$1" "$FILE" | _print || true
+    ;;
+  *)
+    tail -n "$1" "$FILE" | _print
+    ;;
+esac
