@@ -8,7 +8,7 @@ mkdir -p "$(dirname "$RICH_HISTORY_FILE")"
 
 _rich_history_log() {
   local line idx cmd
-  line="$(HISTTIMEFORMAT= history 1)"
+  line="$(HISTTIMEFORMAT= builtin history 1)"
   line="${line#"${line%%[![:space:]]*}"}"
   idx="${line%%[^0-9]*}"
   [[ -z "$idx" || "$idx" == "${_RICH_HISTORY_LAST_IDX:-}" ]] && return
@@ -24,3 +24,5 @@ case "$PROMPT_COMMAND" in
   *_rich_history_log*) ;;
   *) PROMPT_COMMAND="_rich_history_log${PROMPT_COMMAND:+; $PROMPT_COMMAND}" ;;
 esac
+
+alias history=rh

@@ -13,3 +13,5 @@ _rich_history_log() {
 
 autoload -Uz add-zsh-hook
 add-zsh-hook preexec _rich_history_log
+
+alias history=rh
