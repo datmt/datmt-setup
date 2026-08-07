@@ -2,6 +2,10 @@
 
 Log every shell command with timestamp + working directory to a local JSONL file. Works in zsh and bash.
 
+> **Warning:** Commands are stored **in plaintext, unencrypted**, on disk (`~/.local/share/rich-history/history.jsonl`). Anything you type — including secrets pasted inline (API keys, tokens, passwords in `curl`/`export`/connection strings) — is captured verbatim and kept indefinitely. There is no redaction, filtering, or encryption. Treat this file like you'd treat `.bash_history`: readable by anyone with access to your account, and worth excluding from backups/sync targets you don't fully trust. Review before sharing, backing up, or committing anything derived from it.
+>
+> `rh-import` backfills your *entire* existing shell history (potentially years of commands) in one shot — same plaintext exposure applies retroactively. Check what you're importing if your history contains sensitive commands.
+
 ## Install
 
 ```sh
