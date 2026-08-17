@@ -9,7 +9,7 @@ Log every shell command with timestamp + working directory to a local JSONL file
 ## Install
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/datmt/rich-history/master/install.sh | sh
+curl -fsSL https://raw.githubusercontent.com/datmt/datmt-setup/rich-history/master/install.sh | sh
 ```
 
 Then restart your shell (`exec $SHELL`).
@@ -41,13 +41,13 @@ history         # aliased to rh — same as above
 ## Uninstall
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/datmt/rich-history/master/uninstall.sh | sh
+curl -fsSL https://raw.githubusercontent.com/datmt/datmt-setup/rich-history/master/uninstall.sh | sh
 ```
 
 Add `--purge` to also delete logged history data:
 
 ```sh
-curl -fsSL https://raw.githubusercontent.com/datmt/rich-history/master/uninstall.sh | sh -s -- --purge
+curl -fsSL https://raw.githubusercontent.com/datmt/datmt-setup/rich-history/master/uninstall.sh | sh -s -- --purge
 ```
 
 ## Details
